@@ -1,0 +1,117 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Empresa {
+  id                  String         @id @default(uuid())
+  nombre              String
+  tipo_empresa        TipoEmpresa
+  tipo                Tipo
+  region              Region
+  ciudad              String
+  pais                String
+  descripcion_impacto String?
+  impactoEmpresa       ImpactoEmpresa? 
+  created_at           DateTime       @default(now()) @map("created_at")
+  updated_at           DateTime       @updatedAt @map("updated_at")
+  proyectos            Proyecto[]
+
+  @@map("empresas")
+}
+
+model ImpactoEmpresa {
+  id                  String   @id @default(uuid())
+  empresaId           String   @unique @map("empresa_id")
+  empresa             Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  litros_agua          Int      @default(0) @map("litros_agua")
+  arboles_plantados    Int      @default(0) @map("arboles_plantados")
+  botellas_recicladas  Int      @default(0) @map("botellas_recicladas")
+  voluntarios         Int      @default(0) @map("voluntarios")
+  uniformes_reciclados Int      @default(0) @map("uniformes_reciclados")
+  co2kg               Float    @default(0) @map("co2_kg")
+  created_at           DateTime @default(now()) @map("created_at")
+  updated_at           DateTime @updatedAt @map("updated_at")
+
+  @@map("impacto_empresa")
+}
+
+
+model Proyecto {
+  id                   String           @id @default(uuid())
+  empresaId            String           @map("empresa_id")
+  nombre               String
+  fecha                DateTime
+  descripcion_proyecto  String?          @map("descripcion_proyecto")
+  resultados_concretos  String?          @map("resultados_concretos")
+  created_at            DateTime         @default(now()) @map("created_at")
+  updated_at            DateTime         @updatedAt @map("updated_at")
+  empresa              Empresa          @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  impactos_proyecto     ImpactoProyecto[]
+
+  @@map("proyectos")
+}
+
+model ImpactoProyecto {
+  id                    String   @id @default(uuid())
+  proyectoId            String   @map("proyecto_id")
+  tipo_impacto           TipoImpacto @map("tipo_impacto")
+  metrica               String
+  valor                 String
+  unidad                String?
+  descripcion_adicional  String?  @map("descripcion_adicional")
+  created_at             DateTime @default(now()) @map("created_at")
+  proyecto              Proyecto @relation(fields: [proyectoId], references: [id], onDelete: Cascade)
+
+  @@map("impacto_proyecto")
+}
+
+model Usuario {
+  id         String   @id @default(uuid())
+  nombre     String  @unique
+  password   String
+  role       Role     @default(ADMIN)
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt @map("updated_at")
+
+  @@map("usuarios")
+}
+
+enum TipoEmpresa {
+  Manufactura
+  Retail
+  Servicios
+  Tecnologia
+  Alimentos
+  Construccion
+  Logistica
+  Farmaceutica
+}
+
+enum Tipo {
+  EXP
+  LIFE
+  UPC
+}
+
+enum Region {
+  Norte
+  Sur
+  Centro
+  Metropolitana
+}
+
+enum TipoImpacto {
+  ambiental
+  social
+  cultura
+}
+
+enum Role {
+  ADMIN
+  SUPER_ADMIN
+}
