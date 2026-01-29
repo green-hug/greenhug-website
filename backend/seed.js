@@ -12,7 +12,6 @@ const seedData = async () => {
         data: {
           nombre: 'EcoTech Solutions',
           tipo_empresa: 'Tecnologia',
-          tipo: 'EXP',
           region: 'Norte',
           ciudad: 'Monterrey',
           pais: 'México',
@@ -23,7 +22,6 @@ const seedData = async () => {
         data: {
           nombre: 'Green Manufacturing',
           tipo_empresa: 'Manufactura',
-          tipo: 'LIFE',
           region: 'Centro',
           ciudad: 'Guadalajara',
           pais: 'México',
@@ -34,7 +32,6 @@ const seedData = async () => {
         data: {
           nombre: 'Sustainable Logistics',
           tipo_empresa: 'Logistica',
-          tipo: 'UPC',
           region: 'Sur',
           ciudad: 'Mérida',
           pais: 'México',
@@ -45,7 +42,6 @@ const seedData = async () => {
         data: {
           nombre: 'Retail Verde',
           tipo_empresa: 'Retail',
-          tipo: 'EXP',
           region: 'Metropolitana',
           ciudad: 'Ciudad de México',
           pais: 'México',
@@ -64,6 +60,7 @@ const seedData = async () => {
       data: {
         empresaId: empresas[0].id,
         nombre: 'Programa de Reciclaje Digital',
+        tipo: 'EXP',
         fecha: new Date('2024-03-15'),
         descripcion_proyecto: 'Implementación de un programa integral de reciclaje de equipos electrónicos',
         resultados_concretos: 'Reciclaje de 500 equipos electrónicos y reducción del 25% en residuos digitales'
@@ -97,6 +94,7 @@ const seedData = async () => {
       data: {
         empresaId: empresas[1].id,
         nombre: 'Reforestación Industrial',
+        tipo: 'EXP',
         fecha: new Date('2024-02-10'),
         descripcion_proyecto: 'Programa de reforestación en zonas industriales',
         resultados_concretos: 'Plantación de 1000 árboles y creación de 3 espacios verdes'
@@ -129,6 +127,7 @@ const seedData = async () => {
       data: {
         empresaId: empresas[2].id,
         nombre: 'Logística Verde',
+        tipo: 'LIFE',
         fecha: new Date('2024-01-20'),
         descripcion_proyecto: 'Implementación de rutas de distribución sostenibles y vehículos eléctricos',
         resultados_concretos: 'Reducción del 40% en emisiones de transporte y optimización de 15 rutas'
@@ -161,6 +160,7 @@ const seedData = async () => {
       data: {
         empresaId: empresas[3].id,
         nombre: 'Programa de Uniformes Sostenibles',
+        tipo: 'UPC',
         fecha: new Date('2024-04-05'),
         descripcion_proyecto: 'Reciclaje y reutilización de uniformes corporativos en nuevos productos',
         resultados_concretos: 'Reciclaje de 140 uniformes y creación de 80 productos reutilizables'
@@ -201,6 +201,7 @@ const seedData = async () => {
       data: {
         empresaId: empresas[0].id,
         nombre: 'Ahorro de Agua Inteligente',
+        tipo: 'LIFE',
         fecha: new Date('2024-05-12'),
         descripcion_proyecto: 'Sistema IoT para optimización del consumo de agua en oficinas',
         resultados_concretos: 'Ahorro de 15,000 litros de agua y reducción del 30% en consumo'
@@ -233,6 +234,7 @@ const seedData = async () => {
       data: {
         empresaId: empresas[1].id,
         nombre: 'Reciclaje de Envases',
+        tipo: 'PRO',
         fecha: new Date('2024-06-18'),
         descripcion_proyecto: 'Programa integral de reciclaje de envases y empaques industriales',
         resultados_concretos: 'Reciclaje de 3,000 botellas y reducción de residuos industriales'
@@ -263,60 +265,7 @@ const seedData = async () => {
     proyectos.push(proyecto3, proyecto4, proyecto5, proyecto6);
 
     console.log('✅ Proyectos creados:', proyectos.length);
-
-    // Crear impactos acumulados para cada empresa
-    await Promise.all([
-      // EcoTech Solutions - Impacto acumulado
-      prisma.impactoEmpresa.create({
-        data: {
-          empresaId: empresas[0].id,
-          litros_agua: 15000,
-          arboles_plantados: 50,
-          botellas_recicladas: 2000,
-          voluntarios: 25,
-          uniformes_reciclados: 100,
-          co2kg: 2500
-        }
-      }),
-      // Green Manufacturing - Impacto acumulado
-      prisma.impactoEmpresa.create({
-        data: {
-          empresaId: empresas[1].id,
-          litros_agua: 25000,
-          arboles_plantados: 1000,
-          botellas_recicladas: 3000,
-          voluntarios: 150,
-          uniformes_reciclados: 200,
-          co2kg: 5000
-        }
-      }),
-      // Sustainable Logistics - Impacto acumulado
-      prisma.impactoEmpresa.create({
-        data: {
-          empresaId: empresas[2].id,
-          litros_agua: 12000,
-          arboles_plantados: 80,
-          botellas_recicladas: 1500,
-          voluntarios: 40,
-          uniformes_reciclados: 60,
-          co2kg: 1800
-        }
-      }),
-      // Retail Verde - Impacto acumulado
-      prisma.impactoEmpresa.create({
-        data: {
-          empresaId: empresas[3].id,
-          litros_agua: 18000,
-          arboles_plantados: 120,
-          botellas_recicladas: 2800,
-          voluntarios: 80,
-          uniformes_reciclados: 140,
-          co2kg: 3200
-        }
-      })
-    ]);
-
-    console.log('✅ Impactos empresariales creados');
+    console.log('✅ Los impactos se calcularán automáticamente desde los proyectos');
     console.log('🎉 ¡Datos de prueba agregados exitosamente!');
 
   } catch (error) {

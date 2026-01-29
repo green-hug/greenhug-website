@@ -6,46 +6,64 @@ class RankingController {
   // Obtener ranking general acumulado
   async getRankingGeneral(req, res) {
     try {
-      const ranking = await prisma.impactoEmpresa.findMany({
+      // Obtener todas las empresas con sus proyectos e impactos
+      const empresas = await prisma.empresa.findMany({
         include: {
-          empresa: {
-            select: {
-              nombre: true,
-              tipo_empresa: true,
-              region: true,
-              ciudad: true,
-              pais: true,
-              descripcion_impacto: true
+          proyectos: {
+            include: {
+              impactos_proyecto: true
             }
           }
         }
-        // No ordenamos aquí, lo haremos después de calcular puntos
       });
 
-      // Formatear respuesta y calcular puntos
-      const rankingFormateado = ranking.map((impacto) => {
+      // Formatear respuesta y calcular puntos desde los proyectos
+      const rankingFormateado = empresas.map((empresa) => {
+        // Inicializar totales
+        let litrosAgua = 0;
+        let arbolesPlantados = 0;
+        let botellasRecicladas = 0;
+        let voluntarios = 0;
+        let uniformesReciclados = 0;
+        let co2Kg = 0;
+
+        // Sumar impactos de todos los proyectos de la empresa
+        empresa.proyectos.forEach((proyecto) => {
+          proyecto.impactos_proyecto.forEach((impacto) => {
+            const valor = parseInt(impacto.valor) || 0;
+            const metrica = (impacto.metrica || '').toLowerCase();
+            
+            if (metrica.includes('árbol') || metrica.includes('arbol')) {
+              arbolesPlantados += valor;
+            } else if (metrica.includes('agua') || metrica.includes('litro')) {
+              litrosAgua += valor;
+            } else if (metrica.includes('co2') || metrica.includes('carbono')) {
+              co2Kg += valor;
+            } else if (metrica.includes('botella') || metrica.includes('pet')) {
+              botellasRecicladas += valor;
+            } else if (metrica.includes('voluntario')) {
+              voluntarios += valor;
+            } else if (metrica.includes('uniforme')) {
+              uniformesReciclados += valor;
+            }
+          });
+        });
+
         // Calcular impacto ambiental
         const impactoAmbiental = {
-          arboles: impacto.arboles_plantados || 0,
-          co2Kg: impacto.co2kg || 0,
-          litrosAgua: impacto.litros_agua || 0
+          arboles: arbolesPlantados,
+          co2Kg: co2Kg,
+          litrosAgua: litrosAgua
         };
 
         // Calcular impacto social
         const impactoSocial = {
-          voluntarios: impacto.voluntarios || 0,
-          horasVoluntariado: (impacto.voluntarios || 0) * 4, // Estimado: 4 horas por voluntario
-          comunidadesBeneficiadas: Math.ceil((impacto.arboles_plantados || 0) / 1000) // Estimado
+          voluntarios: voluntarios,
+          horasVoluntariado: voluntarios * 4, // Estimado: 4 horas por voluntario
+          comunidadesBeneficiadas: Math.ceil(arbolesPlantados / 1000) // Estimado
         };
 
         // Calcular puntos totales usando sistema Greenhug
-        const litrosAgua = impacto.litros_agua || 0;
-        const arbolesPlantados = impacto.arboles_plantados || 0;
-        const botellasRecicladas = impacto.botellas_recicladas || 0;
-        const voluntarios = impacto.voluntarios || 0;
-        const uniformesReciclados = impacto.uniformes_reciclados || 0;
-        const co2Kg = impacto.co2kg || 0;
-        
         const puntosTotales = 
           Math.floor(litrosAgua / 2000) + // 2,000L = 1 punto
           (arbolesPlantados * 3) + // 1 árbol = 3 puntos
@@ -55,15 +73,15 @@ class RankingController {
           Math.floor(co2Kg / 3); // 3kg CO₂ = 1 punto
 
         return {
-          empresaId: impacto.empresaId,
+          empresaId: empresa.id,
           empresa: {
-            id: impacto.empresaId,
-            nombre: impacto.empresa.nombre,
-            tipo_empresa: impacto.empresa.tipo_empresa,
-            region: impacto.empresa.region,
-            ciudad: impacto.empresa.ciudad,
-            pais: impacto.empresa.pais,
-            descripcion_impacto: impacto.empresa.descripcion_impacto
+            id: empresa.id,
+            nombre: empresa.nombre,
+            tipo_empresa: empresa.tipo_empresa,
+            region: empresa.region,
+            ciudad: empresa.ciudad,
+            pais: empresa.pais,
+            descripcion_impacto: empresa.descripcion_impacto
           },
           puntos_totales: puntosTotales,
           impactoAmbiental,

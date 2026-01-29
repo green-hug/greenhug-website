@@ -73,7 +73,6 @@ const authController = {
         select: {
           id: true,
           nombre: true,
-          email: true,
           role: true,
           created_at: true
         }

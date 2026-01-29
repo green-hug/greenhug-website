@@ -11,7 +11,6 @@ model Empresa {
   id                  String         @id @default(uuid())
   nombre              String
   tipo_empresa        TipoEmpresa
-  tipo                Tipo
   region              Region
   ciudad              String
   pais                String
@@ -45,6 +44,7 @@ model Proyecto {
   id                   String           @id @default(uuid())
   empresaId            String           @map("empresa_id")
   nombre               String
+  tipo                 Tipo             @default(PRO)
   fecha                DateTime
   descripcion_proyecto  String?          @map("descripcion_proyecto")
   resultados_concretos  String?          @map("resultados_concretos")
@@ -96,6 +96,7 @@ enum Tipo {
   EXP
   LIFE
   UPC
+  PRO
 }
 
 enum Region {

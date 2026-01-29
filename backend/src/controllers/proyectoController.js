@@ -41,7 +41,7 @@ const proyectoController = {
   async create(req, res) {
     try {
       const { empresaId } = req.params;
-      const { nombre, fecha, descripcion_proyecto, resultados_concretos } = req.body;
+      const { nombre, tipo, fecha, descripcion_proyecto, resultados_concretos } = req.body;
 
       // Validar campos requeridos
       if (!nombre || !fecha) {
@@ -64,6 +64,7 @@ const proyectoController = {
       const proyecto = await prisma.proyecto.create({
         data: {
           nombre,
+          tipo: tipo || 'PRO',
           fecha: new Date(fecha),
           descripcion_proyecto: descripcion_proyecto || null,
           resultados_concretos: resultados_concretos || null,
