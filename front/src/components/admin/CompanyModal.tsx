@@ -81,10 +81,16 @@ const CompanyModal = ({ isOpen, onClose, onSubmit, initialData, mode }: CompanyM
     }
   }, [isOpen, initialData, mode, reset]);
 
-  const onFormSubmit = (data: EmpresaFormData) => {
-    onSubmit(data);
-    reset();
-    onClose();
+  const onFormSubmit = async (data: EmpresaFormData) => {
+    try {
+      console.log("Datos a enviar:", data);
+      await onSubmit(data);
+      reset();
+      onClose();
+    } catch (error) {
+      console.error("Error al enviar formulario:", error);
+      // No cerrar el modal si hay error
+    }
   };
 
   const handleClose = () => {
@@ -142,7 +148,7 @@ const CompanyModal = ({ isOpen, onClose, onSubmit, initialData, mode }: CompanyM
               <div className="space-y-2">
                 <Label htmlFor="tipo_empresa">Tipo de Empresa *</Label>
                 <Select 
-                  onValueChange={(value) => setValue("tipo_empresa", value as TipoEmpresa)} 
+                  onValueChange={(value) => setValue("tipo_empresa", value as TipoEmpresa, { shouldValidate: true })} 
                   value={watch("tipo_empresa")}
                 >
                   <SelectTrigger>
@@ -156,6 +162,7 @@ const CompanyModal = ({ isOpen, onClose, onSubmit, initialData, mode }: CompanyM
                     ))}
                   </SelectContent>
                 </Select>
+                <input type="hidden" {...register("tipo_empresa", { required: "El tipo es requerido" })} />
                 {errors.tipo_empresa && (
                   <p className="text-sm text-destructive">{errors.tipo_empresa.message}</p>
                 )}
@@ -164,7 +171,7 @@ const CompanyModal = ({ isOpen, onClose, onSubmit, initialData, mode }: CompanyM
               <div className="space-y-2">
                 <Label htmlFor="region">Región *</Label>
                 <Select 
-                  onValueChange={(value) => setValue("region", value as Region)} 
+                  onValueChange={(value) => setValue("region", value as Region, { shouldValidate: true })} 
                   value={watch("region")}
                 >
                   <SelectTrigger>
@@ -178,6 +185,7 @@ const CompanyModal = ({ isOpen, onClose, onSubmit, initialData, mode }: CompanyM
                     ))}
                   </SelectContent>
                 </Select>
+                <input type="hidden" {...register("region", { required: "La región es requerida" })} />
                 {errors.region && (
                   <p className="text-sm text-destructive">{errors.region.message}</p>
                 )}

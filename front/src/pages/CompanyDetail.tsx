@@ -128,25 +128,21 @@ const CompanyDetail = () => {
         return;
       }
 
-      // Estrategia: Combinar datos de empresa con datos de impacto reales del backend
-      //console.log('Cargando datos reales para empresa:', empresa.nombre, 'ID:', empresa.id);
-      
       let datosImpacto = null;
       
       // Intentar obtener impacto desde el endpoint específico
       try {
-       // console.log('Intentando cargar impacto desde /api/impacto/${empresaId}');
+
         const impactoResponse = await apiService.getImpactoEmpresa(empresa.id);
-        //console.log('✅ Impacto cargado exitosamente:', impactoResponse);
         datosImpacto = impactoResponse;
       } catch (impactoError) {
         console.warn('❌ Fallo endpoint de impacto individual:', impactoError.message);
         
         // Fallback: Intentar obtener empresa con includes
         try {
-          //console.log('Intentando cargar empresa con datos incluidos');
+
           const empresaCompleta = await apiService.getEmpresaById(empresa.id);
-          //console.log('✅ Empresa completa cargada:', empresaCompleta);
+
           
           // Verificar si tiene impactoEmpresa o impacto_empresa
           datosImpacto = empresaCompleta.impactoEmpresa || 
@@ -154,18 +150,18 @@ const CompanyDetail = () => {
                         null;
           
           if (datosImpacto) {
-            //console.log('✅ Encontrados datos de impacto en empresa');
+
           } else {
-            //console.log('ℹ️ Empresa no tiene datos de impacto incluidos');
+
           }
         } catch (empresaError) {
-          //console.warn('❌ También falló cargar empresa completa:', empresaError.message);
+          
         }
       }
       
       // Crear objeto de impacto estandarizado
       const impactoEmpresa = crearObjetoImpacto(datosImpacto);
-      //console.log('Datos de impacto finales estandarizados:', impactoEmpresa);
+
 
       // Obtener proyectos de la empresa
       let proyectos = [];
@@ -386,40 +382,52 @@ const CompanyDetail = () => {
           />
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mt-12">
-            <MetricCard
-              icon={TreePine}
-              value={company.metrics.trees.toLocaleString()}
-              label="Árboles plantados"
-            />
-            <MetricCard
-              icon={Droplets}
-              value={`${(company.metrics.water / 1000).toFixed(0)}k L`}
-              label="Agua infiltrada"
-            />
-            <MetricCard
-              icon={Cloud}
-              value={
-                <span className="whitespace-nowrap">
-                  {formatNumber(company.metrics.co2)} ton
-                </span>
-              }
-              label="CO₂ capturado"
-            />
-            <MetricCard
-              icon={Recycle}
-              value={`${(company.metrics.bottles / 1000).toFixed(0)}k`}
-              label="Botellas PET"
-            />
-            <MetricCard
-              icon={Shirt}
-              value={company.metrics.uniforms.toLocaleString()}
-              label="Uniformes reciclados"
-            />
-            <MetricCard
-              icon={Users}
-              value={company.metrics.volunteers.toLocaleString()}
-              label="Voluntarios"
-            />
+            {company.metrics.trees > 0 && (
+              <MetricCard
+                icon={TreePine}
+                value={formatNumber(company.metrics.trees)}
+                label="Árboles plantados"
+              />
+            )}
+            {company.metrics.water > 0 && (
+              <MetricCard
+                icon={Droplets}
+                value={`${formatNumber(company.metrics.water)} L`}
+                label="Agua infiltrada"
+              />
+            )}
+            {company.metrics.co2 > 0 && (
+              <MetricCard
+                icon={Cloud}
+                value={
+                  <span className="whitespace-nowrap">
+                    {formatNumber(company.metrics.co2)} kg
+                  </span>
+                }
+                label="CO₂ capturado"
+              />
+            )}
+            {company.metrics.bottles > 0 && (
+              <MetricCard
+                icon={Recycle}
+                value={formatNumber(company.metrics.bottles)}
+                label="Botellas PET"
+              />
+            )}
+            {company.metrics.uniforms > 0 && (
+              <MetricCard
+                icon={Shirt}
+                value={formatNumber(company.metrics.uniforms)}
+                label="Uniformes reciclados"
+              />
+            )}
+            {company.metrics.volunteers > 0 && (
+              <MetricCard
+                icon={Users}
+                value={formatNumber(company.metrics.volunteers)}
+                label="Voluntarios"
+              />
+            )}
           </div>
         </div>
       </section>

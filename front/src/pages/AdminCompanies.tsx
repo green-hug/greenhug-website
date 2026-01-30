@@ -243,10 +243,6 @@ const AdminCompanies = () => {
               </p>
             </div>
             <div className="flex items-center gap-3">
-              <Button variant="outline" size="sm">
-                <Download className="w-4 h-4 mr-2" />
-                Exportar
-              </Button>
               <Button size="sm" onClick={handleCreateCompany}>
                 <Plus className="w-4 h-4 mr-2" />
                 Nueva Empresa

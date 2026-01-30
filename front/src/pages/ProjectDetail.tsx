@@ -285,14 +285,14 @@ const ProjectDetail = () => {
             </h1>
 
             <div className="flex flex-wrap gap-4 text-white/80 mb-6">
-              <div className="flex items-center gap-2">
+              {/* <div className="flex items-center gap-2">
                 <Building className="w-4 h-4" />
                 {project.company}
               </div>
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4" />
                 {project.location}
-              </div>
+              </div> */}
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4" />
                 {project.date}

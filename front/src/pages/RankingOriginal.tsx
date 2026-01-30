@@ -302,9 +302,9 @@ const RankingT = () => {
                       className="card-premium p-4 md:p-6 flex items-center gap-4 group hover:shadow-premium-lg transition-all"
                     >
                       {/* Rank Number */}
-                      <div className="flex items-center justify-center flex-shrink-0">
+                      {/* <div className="flex items-center justify-center flex-shrink-0">
                         {getMedalIcon(index + 1)}
-                      </div>
+                      </div> */}
 
                       {/* Company Info */}
                       <div className="flex-1 min-w-0">
@@ -339,8 +339,8 @@ const RankingT = () => {
                         </div>
                         {company.growth !== undefined && company.growth > 0 && (
                           <div className="flex items-center gap-1 text-xs text-success">
-                            <TrendingUp className="w-3 h-3" />
-                            +{company.growth}%
+                            {/* <TrendingUp className="w-3 h-3" />
+                            +{company.growth}% */}
                           </div>
                         )}
                       </div>

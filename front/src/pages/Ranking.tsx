@@ -458,7 +458,7 @@ const Ranking = () => {
                   </div>
                   <div className="flex items-center justify-end gap-1 text-success text-sm">
                     <TrendingUp className="w-3 h-3" />
-                    +{company.growth}%
+                    {/* +{company.growth}% */}
                   </div>
                 </div>
 

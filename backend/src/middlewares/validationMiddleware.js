@@ -17,7 +17,6 @@ const empresaValidations = {
   create: validate([
     body('nombre').notEmpty().withMessage('El nombre es requerido'),
     body('tipo_empresa').isIn(['Manufactura', 'Retail', 'Servicios', 'Tecnologia', 'Alimentos', 'Construccion', 'Logistica', 'Farmaceutica']),
-    body('tipo').isIn(['EXP', 'LIFE', 'UPC']),
     body('region').isIn(['Norte', 'Sur', 'Centro', 'Metropolitana']),
     body('ciudad').notEmpty(),
     body('pais').notEmpty()

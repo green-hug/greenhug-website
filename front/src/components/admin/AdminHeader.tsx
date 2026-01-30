@@ -26,11 +26,11 @@ const AdminHeader = ({ onMenuClick }: AdminHeaderProps) => {
       {/* Search bar */}
       <div className="flex-1 max-w-md mx-4">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          {/* <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             placeholder="Buscar empresas, proyectos, usuarios..."
             className="pl-10 border-border/60 focus:border-primary/60 focus:ring-primary/20"
-          />
+          /> */}
         </div>
       </div>
 
